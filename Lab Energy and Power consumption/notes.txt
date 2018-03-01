@@ -1,0 +1,19 @@
+
+-------------------------------------------------
+Measurements
+-------------------------------------------------
+Resistor:       10.08 Ohm
+U_battery:      3.2 V
+
+Not connected:  0.94 mV (avg)
+Idle voltage:   1.15 mV (avg)      --> 0.31 mV      (minus offset)
+All lights on:  105.25 mV (avg)    --> 104.31 mV    (minus offset)
+
+
+Steps       U_shunt         U_mote      I_mote      P_mote      E_mote
+-------------------------------------------------------------------------
+Idle        0.31 mV         3199.6 mV   0.31 µA     98 µW       24.6 µWs  
+All on      104 mV          3095.6 mV   10 mA       32 mW       8.0 mWs
+1 LED       29.25 mV        3171 mv     2.9 mA       9.2 mW     2.3 mWs
+2 LEDs      72.00 mV        3128 mV     7.1 mA       22.3 mW    5.6 mWs
+3 LEDs      99.00 mV        3101 mV     9.8 mA       30.45 mW   7.6 mWs
