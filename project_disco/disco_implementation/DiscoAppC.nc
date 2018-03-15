@@ -4,8 +4,12 @@ configuration DiscoAppC
 }
 implementation
 {
-  components MainC, DiscoC;
+    components MainC, DiscoC;
+    components new TimerMilliC() as DutyCycleJ;
+    components new TimerMilliC() as DutyCycleI;
 
-  DiscoC -> MainC.Boot;
+    DiscoC -> MainC.Boot;
+    DiscoC.DutyCycleJ -> DutyCycleJ;
+    DiscoC.DutyCycleI -> DutyCycleI;
 }
 
