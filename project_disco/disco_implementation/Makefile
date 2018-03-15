@@ -1,0 +1,3 @@
+COMPONENT=DiscoAppC
+include $(MAKERULES)
+
