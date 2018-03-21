@@ -4,7 +4,7 @@ configuration DiscoAppC
 }
 implementation
 {
-    components MainC, DiscoC;
+    components MainC, DiscoC, RadioM;
     components new TimerMilliC() as DutyCycleJ;
     components new TimerMilliC() as DutyCycleI;
 
