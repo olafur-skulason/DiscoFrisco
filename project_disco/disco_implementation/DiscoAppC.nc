@@ -1,7 +1,5 @@
 
-configuration DiscoAppC
-{
-}
+configuration DiscoAppC { }
 implementation
 {
     components MainC, DiscoC, RadioM;
@@ -11,5 +9,6 @@ implementation
     DiscoC -> MainC.Boot;
     DiscoC.DutyCycleJ -> DutyCycleJ;
     DiscoC.DutyCycleI -> DutyCycleI;
+    DiscoC.RadioController -> RadioM;
 }
 

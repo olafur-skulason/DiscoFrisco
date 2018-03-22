@@ -4,6 +4,7 @@
  **/
 
 #include "Timer.h"
+#include "message.h"
 //#include "RadioC.h"
 
 #define J_PRIME 3
@@ -17,6 +18,7 @@ module DiscoC @safe()
 {
     uses interface Timer<TMilli> as DutyCycleJ;
     uses interface Timer<TMilli> as DutyCycleI;
+    uses interface RadioController;
     uses interface Boot;
 }
 implementation
@@ -37,5 +39,15 @@ implementation
         // TODO: Run discovery
     }
 
+
+    event void RadioController.neighborFound(uint16_t address)
+    {
+
+    }
+
+    event void RadioController.messageReceived(uint16_t address, message_t* message)
+    {
+
+    }
 }
 
