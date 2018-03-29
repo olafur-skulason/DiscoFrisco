@@ -32,11 +32,13 @@ implementation
     event void DutyCycleJ.fired()
     {
         // TODO: Run discovery
+        call RadioController.sendDiscoveryMessage();
     }
     
     event void DutyCycleI.fired()
     {
         // TODO: Run discovery
+        call RadioController.sendDiscoveryMessage();
     }
 
 
