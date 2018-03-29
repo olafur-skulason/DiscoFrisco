@@ -57,6 +57,14 @@ module RadioM {
 
 
         event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len) {
+            radio_discovery_msg* message = (radio_discovery_msg*)msg;
+
+            if(message->MSG == DISCO_MSG) {
+               signal RadioController.neighborFound(message->ID);
+            }
+            else {
+                signal RadioController.messageReceived(message->ID, msg);
+            }
             
             return msg;
         }
