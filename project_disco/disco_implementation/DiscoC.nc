@@ -32,6 +32,7 @@ implementation
 
     event void Boot.booted()
     {
+        call RadioController.start();
         call DutyCycleI.startPeriodic( I_CYCLE );
         call DutyCycleJ.startPeriodic( J_CYCLE );
     }
@@ -46,12 +47,11 @@ implementation
 
     event void RadioController.neighborFound(uint16_t address)
     {
-        //call Present.found();
+        call Present.found();
     }
 
     event void RadioController.messageReceived(uint16_t address, message_t* message)
     {
-
     }
 }
 

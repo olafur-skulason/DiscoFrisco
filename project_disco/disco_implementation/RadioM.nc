@@ -13,6 +13,7 @@ module RadioM {
         uses interface Receive;
         uses interface SplitControl as AMControl;
         uses interface Packet;
+        uses interface AMPacket;
         provides interface RadioController;
     }
 
@@ -22,7 +23,7 @@ module RadioM {
         bool busy = FALSE;
 
         // Initialize radio componenets
-        void start() {
+        command void RadioController.start() {
             call AMControl.start();
         }
 
@@ -57,19 +58,19 @@ module RadioM {
 
 
         event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len) {
-            radio_discovery_msg* message = (radio_discovery_msg*)msg;
+            radio_discovery_msg* message = NULL;
 
-            if(message->MSG == DISCO_MSG) {
-               signal RadioController.neighborFound(message->ID);
+            if (len == sizeof(radio_discovery_msg)) {
+                message = (radio_discovery_msg*)msg;
+                signal RadioController.neighborFound(message->ID);
             }
             else {
-                signal RadioController.messageReceived(message->ID, msg);
+                //signal RadioController.messageReceived(1, msg);
             }
             
             return msg;
         }
 
-// THIS PART MAY BE UNNECCESSARY: IF SO REMOVE AMControl
         event void AMControl.startDone(error_t err) {
             if(err == SUCCESS) {
                 
@@ -79,5 +80,4 @@ module RadioM {
         event void AMControl.stopDone(error_t err) {
 
         }
-// END AMControl PART HERE
     }

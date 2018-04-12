@@ -1,10 +1,9 @@
 
-#define AM_DISCORADIO 6
-
 configuration DiscoAppC { }
 implementation
 {
     components MainC, LedsC, DiscoC, RadioM, PresentM;
+    components ActiveMessageC;
     components new TimerMilliC() as DutyCycleJ;
     components new TimerMilliC() as DutyCycleI;
     components new TimerMilliC() as AwakeTimer;
@@ -18,8 +17,10 @@ implementation
     DiscoC.RadioController -> RadioM;
     DiscoC.Present -> PresentM;
 
+    RadioM.AMControl -> ActiveMessageC;
     RadioM.Send -> AMSenderC;
     RadioM.Receive -> AMReceiverC;
+    RadioM.AMPacket -> AMSenderC;
     RadioM.Packet -> AMSenderC;
 
     PresentM.Leds -> LedsC;

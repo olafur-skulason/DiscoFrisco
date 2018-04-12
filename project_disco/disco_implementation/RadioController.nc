@@ -7,6 +7,7 @@
 #include "message.h"
 
 interface RadioController {
+    command void start();
     command void sendDiscoveryMessage();
     command void sendMessage(message_t* message);
     event void neighborFound(uint16_t address); // Will be signaled if neighbors are found.

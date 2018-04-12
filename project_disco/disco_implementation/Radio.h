@@ -2,6 +2,10 @@
 #ifndef RADIO_H
 #define RADIO_H
 
+enum {
+ AM_DISCORADIO = 6
+};
+
 typedef nx_struct radio_discovery_msg {
   nx_uint16_t MSG; // Message type header.
   nx_uint16_t ID;  // Local node ID.
