@@ -7,8 +7,8 @@
 #include "message.h"
 //#include "RadioC.h"
 
-#define J_PRIME 3
-#define I_PRIME 2
+#define J_PRIME 23
+#define I_PRIME 157
 #define DUTYCYCLE_CONSTANT 500
 
 #define J_CYCLE (J_PRIME * DUTYCYCLE_CONSTANT)
