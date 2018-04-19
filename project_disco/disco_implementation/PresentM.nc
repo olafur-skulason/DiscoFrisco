@@ -17,14 +17,18 @@ module PresentM @safe()
 implementation
 {
     command void Present.awake() {
+        #ifndef BLOCK_LEDS
         call Leds.led0On();
         call AwakeTimer.startOneShot(AWAKE_TIME);
+        #endif
     }
     
     command void Present.found() {
-	call Leds.led1On();
+        #ifndef BLOCK_LEDS
+	    call Leds.led1On();
         call Leds.led2On();
         call FoundTimer.startOneShot(FOUND_TIME);
+        #endif
     }
 
     event void AwakeTimer.fired() {

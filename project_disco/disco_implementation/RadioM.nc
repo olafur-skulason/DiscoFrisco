@@ -14,16 +14,22 @@ module RadioM {
         uses interface SplitControl as AMControl;
         uses interface Packet;
         uses interface AMPacket;
+        uses interface Timer<TMilli> as ListenPeriod;
         provides interface RadioController;
     }
 
     implementation {
         message_t packet;
         bool busy = FALSE;
+        bool first_send = FALSE;
 
         // Initialize radio componenets
         command void RadioController.start() {
             call AMControl.start();
+        }
+
+        command void RadioController.stop() {
+            call AMControl.stop();
         }
 
         command void RadioController.sendOnlineMessage() {
@@ -50,6 +56,7 @@ module RadioM {
         void sendDiscoveredMessage(uint16_t address) {
             // Send a radio message that a neighbor has been found.
             radio_discovered_msg * msg = NULL;
+            first_send = !first_send;
             if (busy == TRUE)
                 return;
 
@@ -75,9 +82,15 @@ module RadioM {
             if (&packet == msg) {
                 busy = FALSE;
             }
-            if (&packet2 == msg) {
-                busy = FALSE;
-            }
+
+            if (first_send == TRUE)
+                call ListenPeriod.startOneShot( LISTEN_PERIOD );
+            else
+                signal RadioController.discoveryFinished();
+        }
+
+        event void ListenPeriod.fired() {
+            call RadioController.sendDiscoveryMessage();
         }
 
 
@@ -98,7 +111,9 @@ module RadioM {
 
         event void AMControl.startDone(error_t err) {
             if(err == SUCCESS) {
-                
+            }
+            else {
+                call AMControl.start();
             }
         }
 
