@@ -6,6 +6,7 @@ implementation
     components ActiveMessageC;
     components new TimerMilliC() as DutyCycleJ;
     components new TimerMilliC() as DutyCycleI;
+    components new TimerMilliC() as ListenPeriod;
     components new TimerMilliC() as AwakeTimer;
     components new TimerMilliC() as FoundTimer;
     components new AMSenderC(AM_DISCORADIO);
@@ -22,6 +23,7 @@ implementation
     RadioM.Receive -> AMReceiverC;
     RadioM.AMPacket -> AMSenderC;
     RadioM.Packet -> AMSenderC;
+    RadioM.ListenPeriod -> ListenPeriod;
 
     PresentM.Leds -> LedsC;
     PresentM.AwakeTimer -> AwakeTimer;   
