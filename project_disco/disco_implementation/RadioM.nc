@@ -20,7 +20,7 @@ module RadioM {
 
     implementation {
         message_t packet;
-        bool busy = FALSE;
+        bool radio_busy = FALSE;
         bool first_send = FALSE;
 
         // Initialize radio componenets
@@ -37,9 +37,10 @@ module RadioM {
 
         command void RadioController.sendDiscoveryMessage() {
             radio_discovery_msg * msg = NULL;
-            if (busy == TRUE)
+            if (radio_busy == TRUE)
                 return;
 
+            first_send = !first_send;
             msg = (radio_discovery_msg*)(call Packet.getPayload(&packet, sizeof(radio_discovery_msg)));
             if (msg == NULL) {
                 return;
@@ -49,15 +50,14 @@ module RadioM {
             msg->ID = TOS_NODE_ID;
 
             if (call Send.send(AM_BROADCAST_ADDR, &packet, sizeof(radio_discovery_msg)) == SUCCESS) {
-                busy = TRUE;
+                radio_busy = TRUE;
             }
         }
 
         void sendDiscoveredMessage(uint16_t address) {
             // Send a radio message that a neighbor has been found.
             radio_discovered_msg * msg = NULL;
-            first_send = !first_send;
-            if (busy == TRUE)
+            if (radio_busy == TRUE)
                 return;
 
             msg = (radio_discovered_msg*)(call Packet.getPayload(&packet, sizeof(radio_discovered_msg)));
@@ -70,23 +70,27 @@ module RadioM {
             msg->FOUND = address;
 
             if (call Send.send(AM_BROADCAST_ADDR, &packet, sizeof(radio_discovered_msg)) == SUCCESS) {
-                busy = TRUE;
+                radio_busy == TRUE;
             }
         }
 
         command void RadioController.sendMessage(message_t* message) {
             // Send a payload message.
+            if (radio_busy == TRUE)
+                return;
         }
 
         event void Send.sendDone(message_t* msg, error_t err) {
             if (&packet == msg) {
-                busy = FALSE;
+                radio_busy = FALSE;
             }
 
             if (first_send == TRUE)
                 call ListenPeriod.startOneShot( LISTEN_PERIOD );
-            else
+            else {
+                radio_busy = FALSE;
                 signal RadioController.discoveryFinished();
+            }
         }
 
         event void ListenPeriod.fired() {
@@ -95,12 +99,12 @@ module RadioM {
 
 
         event message_t* Receive.receive(message_t* msg, void* payload, uint8_t len) {
-            radio_discovery_msg* message = NULL;
-
             if (len == sizeof(radio_discovery_msg)) {
-                message = (radio_discovery_msg*)msg;
-                sendDiscoveredMessage(message->ID);
-                signal RadioController.neighborFound(message->ID);
+                radio_discovery_msg* message = (radio_discovery_msg*)payload;
+                if (message->MSG == DISCO_MSG) {
+                    sendDiscoveredMessage(message->ID);
+                    signal RadioController.neighborFound(message->ID);
+                }
             }
             else {
                 //signal RadioController.messageReceived(1, msg);
@@ -111,6 +115,7 @@ module RadioM {
 
         event void AMControl.startDone(error_t err) {
             if(err == SUCCESS) {
+                signal RadioController.startDone();
             }
             else {
                 call AMControl.start();

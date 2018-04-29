@@ -11,8 +11,8 @@ enum {
   AM_DISCORADIO = 8
 };
 #define DEFINED_TOS_AM_GROUP 0x07 // Define the radio group
-#define DUTYCYCLE_CONSTANT 500
-#define LISTEN_PERIOD 50
+#define DUTYCYCLE_CONSTANT 100
+#define LISTEN_PERIOD 100
 //#define BLOCK_LEDS // uncomment to see leds
 #define DISCOVERY_RESET // uncomment to enable disco test mode
 
@@ -32,9 +32,17 @@ module DiscoC @safe()
 }
 implementation
 {
+    bool active_discovery = FALSE;
     void onAwake() 
     {
-        call RadioController.start();
+        if (active_discovery == FALSE) {
+            active_discovery = TRUE;
+            call RadioController.start();
+        }
+    }
+    
+    event void RadioController.startDone()
+    {
         call Present.awake();
         call RadioController.sendDiscoveryMessage();
     }
@@ -71,6 +79,7 @@ implementation
     event void RadioController.discoveryFinished()
     {
         call RadioController.stop();
+        active_discovery = FALSE;
     }
 }
 
