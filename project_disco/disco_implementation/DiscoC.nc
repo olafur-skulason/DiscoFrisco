@@ -65,10 +65,9 @@ implementation
     {
         call Present.found();
         #ifndef DISCOVERY_RESET
-        call DutyCycleI.stop();
-        call DutyCycleJ.stop();
-        call DutyCycleI.startPeriodic( I_CYCLE );
-        call DutyCycleJ.startPeriodic( J_CYCLE );
+        // If in test mode, activate the watchdog and force it to turn off.
+        WDTCTL = WDT_ARST_1_9; 
+        while(1);
         #endif
     }
 

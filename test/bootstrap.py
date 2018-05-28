@@ -35,7 +35,7 @@ def boot_lm(data, r_formula, B):
         coef.append(v.params)
     return coef
 
-data = pd.read_csv("Result_3=23_157_5=29_67new.csv", header=0)
+data = pd.read_csv("Result_23_157_new3.csv", header=0)
 
 bootstrap = pd.DataFrame(boot(data, "Attempt", "latency(S)", 10000))
 bootstrap.to_csv("bootstrapped_results.csv")

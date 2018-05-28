@@ -70,7 +70,7 @@ module RadioM {
             msg->FOUND = address;
 
             if (call Send.send(AM_BROADCAST_ADDR, &packet, sizeof(radio_discovered_msg)) == SUCCESS) {
-                radio_busy == TRUE;
+                radio_busy = TRUE;
             }
         }
 
